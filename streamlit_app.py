@@ -7,11 +7,6 @@ from random import choice
 if 'stats' not in st.session_state:
     st.session_state.stats = {'correct': 0, 'total': 0}
 
-if 'current_word' not in st.session_state:
-    reset_task()
-
-morph = pymorphy2.MorphAnalyzer()
-
 # Список заданий: предложения и словосочетания
 EXAMPLES = [
     {"phrase": "красивая девушка", "target": "красивая", "hint": "Женский род, единственное число, именительный падеж"},
@@ -23,7 +18,7 @@ EXAMPLES = [
     {"phrase": "новые машины", "target": "новые", "hint": "Множественное число, именительный падеж"},
 ]
 
-# Сброс задания
+# Функция для сброса задания
 def reset_task():
     example = choice(EXAMPLES)
     st.session_state.current_phrase = example["phrase"]
@@ -41,6 +36,12 @@ def reset_task():
         "role": None,
     }
     st.session_state.checked = False
+
+# Проверяем, нужно ли инициализировать задание
+if 'current_word' not in st.session_state:
+    reset_task()
+
+morph = pymorphy2.MorphAnalyzer()
 
 # Теория
 def show_theory():
